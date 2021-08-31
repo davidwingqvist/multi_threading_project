@@ -92,11 +92,11 @@ void MultiThreader::Init(unsigned int amount, ThreadType type)
 {
 	if (MULTITHREADER == nullptr)
 	{
+		if (amount <= 0)
+			return;
+
 		MULTITHREADER = new MultiThreader;
 		MULTITHREADER->activeThreads = 0;
-
-		if (amount == 0)
-			return;
 
 		MULTITHREADER->statuses = new unsigned int[availableCores];
 		for (int i = 0; i < availableCores; i++)
