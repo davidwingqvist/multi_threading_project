@@ -5,6 +5,7 @@
 #include <future>
 #include <unordered_map>
 #include <queue>
+#include <mutex>
 
 /*
 				-----------Documentation of Multithreading class-----------
@@ -73,6 +74,8 @@ private:
 	
 	// Pooled Threads
 	std::thread* pooledThreads;
+
+	std::mutex mutex;
 
 	// Jobs to do.
 	std::vector<std::function<void()>> jobs;
@@ -146,6 +149,9 @@ public:
 	static bool IsActive();
 
 	static const int GetAmountOfJobs();
+
+	static void LockMutex();
+	static void UnLockMutex();
 };
 
 /*
@@ -186,3 +192,12 @@ public:
 	Use this function to return any used memory and join any stray threads.
 */
 #define T_DESTROY() MultiThreader::Destroy()
+
+/*
+	Lock mutex so that hazardous operations can proceed undisturbed.
+*/
+#define T_LOCK() (MultiThreader::instance) ? MultiThreader::LockMutex()
+/*
+	Unlock the locked mutex to give the go ahead for other threads.
+*/
+#define T_UNLOCK() (MultiThreader::instance) ? MultiThreader::UnLockMutex();

@@ -1,6 +1,5 @@
 #include "multi_thread_manager.h"
 #include <iostream>
-#include <mutex>
 
 #define POOL(x) MultiThreader::Pool(x)
 #define MULTITHREADER MultiThreader::instance
@@ -347,4 +346,14 @@ const int MultiThreader::GetAmountOfJobs()
 	}
 
 	return 0;
+}
+
+void MultiThreader::LockMutex()
+{
+	MULTITHREADER->mutex.lock();
+}
+
+void MultiThreader::UnLockMutex()
+{
+	MULTITHREADER->mutex.unlock();
 }
