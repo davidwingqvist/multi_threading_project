@@ -14,7 +14,9 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	T_INIT(availableCores - 1, ThreadType::POOL_FIFO);
 
+	//T_LOCK();
 	T_FJOB(Test);
+	//T_UNLOCK();
 
 	T_DESTROY();
 

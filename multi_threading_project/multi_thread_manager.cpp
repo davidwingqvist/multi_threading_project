@@ -115,9 +115,10 @@ void MultiThreader::Init(unsigned int amount, ThreadType type)
 
 void MultiThreader::Destroy()
 {
+	if (!MULTITHREADER)
+		return;
 	// Set activity to false to signal all threads to shutdown.
 	MULTITHREADER->isActive = false;
-
 	for (int i = 0; i < (int)MULTITHREADER->threads.size(); i++)
 	{
 		// Join the threads or simply detach it and get rid of it.
@@ -346,14 +347,4 @@ const int MultiThreader::GetAmountOfJobs()
 	}
 
 	return 0;
-}
-
-void MultiThreader::LockMutex()
-{
-	MULTITHREADER->mutex.lock();
-}
-
-void MultiThreader::UnLockMutex()
-{
-	MULTITHREADER->mutex.unlock();
 }

@@ -75,8 +75,6 @@ private:
 	// Pooled Threads
 	std::thread* pooledThreads;
 
-	std::mutex mutex;
-
 	// Jobs to do.
 	std::vector<std::function<void()>> jobs;
 	std::queue<std::function<void()>> jobs_queue;
@@ -98,6 +96,7 @@ private:
 	static void Pool(unsigned int amount);
 public:
 
+	std::mutex mutex;
 	static MultiThreader* instance;
 	/*
 		If multithreading is used please remember to put Update() into the "Per Frame" section of the game code.
@@ -149,9 +148,6 @@ public:
 	static bool IsActive();
 
 	static const int GetAmountOfJobs();
-
-	static void LockMutex();
-	static void UnLockMutex();
 };
 
 /*
@@ -196,8 +192,8 @@ public:
 /*
 	Lock mutex so that hazardous operations can proceed undisturbed.
 */
-#define T_LOCK() (MultiThreader::instance) ? MultiThreader::LockMutex()
+#define T_LOCK() (MultiThreader::instance) ? MultiThreader::instance->mutex.lock() : void()
 /*
 	Unlock the locked mutex to give the go ahead for other threads.
 */
-#define T_UNLOCK() (MultiThreader::instance) ? MultiThreader::UnLockMutex();
+#define T_UNLOCK() (MultiThreader::instance) ? MultiThreader::instance->mutex.unlock() : void()
