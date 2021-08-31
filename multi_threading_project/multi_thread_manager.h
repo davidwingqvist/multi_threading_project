@@ -70,8 +70,7 @@ private:
 	// Normal threads
 	std::vector<std::thread> threads;
 	int activeThreads;
-	static MultiThreader* instance;
-
+	
 	// Pooled Threads
 	std::thread* pooledThreads;
 
@@ -96,6 +95,7 @@ private:
 	static void Pool(unsigned int amount);
 public:
 
+	static MultiThreader* instance;
 	/*
 		If multithreading is used please remember to put Update() into the "Per Frame" section of the game code.
 		To start a thread simply use the Start() function and input a function that returns void and have one parameter intake which is the index.
@@ -152,16 +152,25 @@ public:
 	Create a job for the pooled threads, 
 	if threads are not activated then this job will run on main thread.
 */
-#define THREAD_JOB(class_name, function_name) (MultiThreader::IsActive()) ? MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this)) : class_name::function_name()
+#define T_JOB(class_name, function_name) (MultiThreader::instance) ? MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this)) : class_name::function_name()
 
+/*
+	Create a job from a function not part of any class.
+	if threads are not activated then this job will run on main thread.
+*/
+#define T_FJOB(job) (MultiThreader::instance) ? MultiThreader::InsertJob(std::bind(&job)) : job()
 /*
 	Create a job only if no other jobs are present in the queue.
 	If jobs are present then this will run on main thread.
 */
-#define THREAD_PRIO_JOB(class_name, function_name) (MultiThreader::GetAmountOfJobs() > 0) ? class_name::function_name() : MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this))
+#define T_PRIO_JOB(class_name, function_name) (MultiThreader::GetAmountOfJobs() > 0) ? class_name::function_name() : MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this))
 
 /*
 	Create a job for the pooled threads,
 	This define is suited for singleton functions inside singletons.
 */
-#define THREAD_SINGLETON_JOB(class_name, function_name) (MultiThreader::IsActive()) ? MultiThreader::InsertJob(std::bind(&class_name::function_name, &*class_name::instance)) : class_name::instance->function_name()
+#define T_SINGLETON_JOB(class_name, function_name) (MultiThreader::instance) ? MultiThreader::InsertJob(std::bind(&class_name::function_name, &*class_name::instance)) : class_name::instance->function_name()
+
+#define T_INIT(threads, type) MultiThreader::Init(threads, type)
+
+#define T_DESTROY() MultiThreader::Destroy()
