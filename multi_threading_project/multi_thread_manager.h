@@ -160,7 +160,7 @@ public:
 	if threads are not activated then this job will run on main thread.
 	FUNCTION JOB
 */
-#define T_FJOB(job) (MultiThreader::instance) ? MultiThreader::InsertJob(std::bind(&job)) : job()
+#define T_FJOB(function_name) (MultiThreader::instance) ? MultiThreader::InsertJob(std::bind(&function_name)) : function_name()
 /*
 	Create a job only if no other jobs are present in the queue.
 	If jobs are present then this will run on main thread.
