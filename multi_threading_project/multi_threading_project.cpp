@@ -1,7 +1,7 @@
 #include <iostream>
 #include "multi_thread_manager.h"
 
-using namespace thread;
+//using namespace thread;
 int global_int = 0;
 
 void Test()
@@ -13,13 +13,14 @@ void Test()
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	T_INIT(T_REC + 1, ThreadType::POOL_FIFO);
+	T_INIT(T_REC + 1, thread::ThreadType::POOL_FIFO);
 
-	//T_LOCK();
-	T_FJOB(Test);
-	T_FJOB(Test);
-	//T_UNLOCK();
+	for (int i = 0; i < 1000; i++)
+	{
+		T_FJOB(Test);
+	}
 
+	while (thread::MultiThreader::GetAmountOfJobs() > 0);
 	T_DESTROY();
 
 	std::cout << "Global INT is: " << global_int << "\n";
