@@ -7,13 +7,17 @@ int global_int = 0;
 void Test()
 {
 	std::cout << "Hello From Thread!\n";
-	global_int += 10;
+	for (int i = 0; i < 100; i++)
+	{
+		std::cout << "Hello\n";
+	}
+	global_int += 1;
 }
 
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	T_INIT(T_REC + 1, thread::ThreadType::POOL_FIFO);
+	T_INIT(T_REC, thread::ThreadType::POOL_FIFO);
 
 	for (int i = 0; i < 1000; i++)
 	{

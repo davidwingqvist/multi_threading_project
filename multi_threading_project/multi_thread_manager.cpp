@@ -34,7 +34,6 @@ void PooledThread(unsigned int id)
 	bool active = true;
 	while (active)
 	{
-
 		// Mutex protects Job list, Only one job per thread.
 		mutx.lock();
 
@@ -234,7 +233,7 @@ const bool MultiThreader::HasActiveThread()
 {
 	for (int i = 0; i < availableCores; i++)
 	{
-		int status = MULTITHREADER->GetStatus(i);
+		const int status = MULTITHREADER->GetStatus(i);
 		if (status == thread_working)
 			return true;
 	}
@@ -323,7 +322,7 @@ void MultiThreader::InsertJob(std::function<void()> job)
 
 }
 
-bool MultiThreader::IsActive()
+const bool MultiThreader::IsActive()
 {
 	return MULTITHREADER->isActive;
 }

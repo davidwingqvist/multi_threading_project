@@ -38,7 +38,7 @@ namespace thread
 	const int availableCores = std::thread::hardware_concurrency() - 1;
 
 	// Recommended amount of threads to use.
-#define T_REC thread::availableCores - 1
+#define T_REC thread::availableCores
 
 	constexpr unsigned int thread_error = -1;
 	constexpr unsigned int thread_free = 0;
@@ -152,7 +152,7 @@ namespace thread
 		static void InsertJob(std::function<void()> job);
 
 		// Used for Threads to check if multithreader is currently active. If not all pooled threads will shutdown.
-		static bool IsActive();
+		static const bool IsActive();
 
 		static const int GetAmountOfJobs();
 	};
