@@ -1,6 +1,7 @@
 #include "multi_thread_manager.h"
 #include <iostream>
 
+using namespace thread;
 #define POOL(x) MultiThreader::Pool(x)
 #define MULTITHREADER MultiThreader::instance
 
