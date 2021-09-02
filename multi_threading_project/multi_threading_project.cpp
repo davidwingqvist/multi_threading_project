@@ -2,6 +2,7 @@
 #include "multi_thread_manager.h"
 #include <d3d11.h>
 #include <d2d1.h>
+#include <typeinfo>
 
 //using namespace thread;
 int global_int = 0;
@@ -30,15 +31,20 @@ public:
 	}
 };
 
+class B
+{
+public:
+	B() {};
+};
+
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	T_INIT(T_REC, thread::ThreadType::POOL_FIFO);
-	int x = 0;
-	T_LJOB([&x] {x = 10;  std::cout << "Hello\n"; });
 
 	while (thread::MultiThreader::GetAmountOfJobs() > 0);
 	T_DESTROY();
 
+	int x = 0;
 	std::cout << "Global INT is: " << x << "\n";
 }
