@@ -181,7 +181,7 @@ namespace thread
 	If jobs are present then this will run on main thread.
 	PRIORITY JOB
 */
-#define T_PJOB(class_name, function_name) (thread::MultiThreader::GetAmountOfJobs() > 0) ? class_name::function_name() : thread::MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this))
+#define T_PJOB(class_name, function_name) (thread::MultiThreader::GetAmountOfJobs() > 0 || !thread::MultiThreader::instance) ? class_name::function_name() : thread::MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this))
 
 /*
 	Create a job for the pooled threads,

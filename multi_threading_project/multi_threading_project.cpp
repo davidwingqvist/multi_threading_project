@@ -14,14 +14,26 @@ void Test()
 	global_int += 1;
 }
 
+class T
+{
+public:
+	void Test()
+	{
+		std::cout << "Test\n";
+	}
+
+	void Thread()
+	{
+		T_PJOB(T, Test);
+	}
+};
+
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	T_INIT(T_REC, thread::ThreadType::POOL_FIFO);
-	T_FJOB(Test);
-	T_FJOB(Test);
-	T_FJOB(Test);
-	Test();
+	T test;
+	test.Thread();
 
 	while (thread::MultiThreader::GetAmountOfJobs() > 0);
 	T_DESTROY();
