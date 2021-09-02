@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <queue>
 #include <mutex>
+#include <iostream>
 
 namespace thread
 {
@@ -122,6 +123,7 @@ namespace thread
 		*/
 		static int Start(void(*function)(int));
 
+
 		// Update() will join any joinable threads and put a block onto the main thread.
 		static void Update();
 
@@ -151,11 +153,17 @@ namespace thread
 		// Insert a new job into the system.
 		static void InsertJob(std::function<void()> job);
 
+		/*
+		template <typename... Lambda>
+		static void InsertJob(const Lambda&... L);
+		*/
+
 		// Used for Threads to check if multithreader is currently active. If not all pooled threads will shutdown.
 		static const bool IsActive();
 
 		static const int GetAmountOfJobs();
 	};
+
 }
 
 
@@ -189,6 +197,14 @@ namespace thread
 	SINGLETON JOB
 */
 #define T_SJOB(class_name, function_name) (thread::MultiThreader::instance) ? thread::MultiThreader::InsertJob(std::bind(&class_name::function_name, &*class_name::instance)) : class_name::instance->function_name()
+
+
+/*
+	Create a job for the pooled threads,
+	Input the lambda function for the threads.
+	LAMBDA JOB
+*/
+#define T_LJOB(lambda_function) (thread::MultiThreader::instance) ? thread::MultiThreader::instance->InsertJob(lambda_function) : void()
 
 /*
 	Initialize the multithreader and prepare it for use.

@@ -348,3 +348,5 @@ const int MultiThreader::GetAmountOfJobs()
 
 	return 0;
 }
+
+
