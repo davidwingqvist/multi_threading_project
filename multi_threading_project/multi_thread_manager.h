@@ -156,52 +156,57 @@ namespace thread
 
 		static const int GetAmountOfJobs();
 	};
+}
 
-	/*
-		Create a job for the pooled threads,
-		if threads are not activated then this job will run on main thread.
-		CLASS *FUNCTION* JOB
-	*/
+
+/*
+	------------ DEFINES ------------
+*/
+
+/*
+	Create a job for the pooled threads,
+	if threads are not activated then this job will run on main thread.
+	CLASS *FUNCTION* JOB
+*/
 #define T_CJOB(class_name, function_name) (thread::MultiThreader::instance) ? thread::MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this)) : class_name::function_name()
 
-	/*
-		Create a job from a function not part of any class.
-		if threads are not activated then this job will run on main thread.
-		FUNCTION JOB
-	*/
+/*
+	Create a job from a function not part of any class.
+	if threads are not activated then this job will run on main thread.
+	FUNCTION JOB
+*/
 #define T_FJOB(function_name) (thread::MultiThreader::instance) ? thread::MultiThreader::InsertJob(std::bind(&function_name)) : function_name()
-	/*
-		Create a job only if no other jobs are present in the queue.
-		If jobs are present then this will run on main thread.
-		PRIORITY JOB
-	*/
+/*
+	Create a job only if no other jobs are present in the queue.
+	If jobs are present then this will run on main thread.
+	PRIORITY JOB
+*/
 #define T_PJOB(class_name, function_name) (thread::MultiThreader::GetAmountOfJobs() > 0) ? class_name::function_name() : thread::MultiThreader::InsertJob(std::bind(&class_name::function_name, &*this))
 
-	/*
-		Create a job for the pooled threads,
-		This define is suited for singleton functions inside singletons.
-		SINGLETON JOB
-	*/
+/*
+	Create a job for the pooled threads,
+	This define is suited for singleton functions inside singletons.
+	SINGLETON JOB
+*/
 #define T_SJOB(class_name, function_name) (thread::MultiThreader::instance) ? thread::MultiThreader::InsertJob(std::bind(&class_name::function_name, &*class_name::instance)) : class_name::instance->function_name()
 
-	/*
-		Initialize the multithreader and prepare it for use.
-		threads - How many threads that should be used.
-		type - What behaviour should these threads have? ThreadType is used here.
-	*/
+/*
+	Initialize the multithreader and prepare it for use.
+	threads - How many threads that should be used.
+	type - What behaviour should these threads have? ThreadType is used here.
+*/
 #define T_INIT(threads, type) thread::MultiThreader::Init(threads, type)
 
-	/*
-		Use this function to return any used memory and join any stray threads.
-	*/
+/*
+	Use this function to return any used memory and join any stray threads.
+*/
 #define T_DESTROY() thread::MultiThreader::Destroy()
 
-	/*
-		Lock mutex so that hazardous operations can proceed undisturbed.
-	*/
+/*
+	Lock mutex so that hazardous operations can proceed undisturbed.
+*/
 #define T_LOCK() (thread::MultiThreader::instance) ? thread::MultiThreader::instance->mutex.lock() : void()
-	/*
-		Unlock the locked mutex to give the go ahead for other threads.
-	*/
+/*
+	Unlock the locked mutex to give the go ahead for other threads.
+*/
 #define T_UNLOCK() (thread::MultiThreader::instance) ? thread::MultiThreader::instance->mutex.unlock() : void()
-}

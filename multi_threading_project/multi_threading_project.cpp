@@ -7,7 +7,7 @@ int global_int = 0;
 void Test()
 {
 	std::cout << "Hello From Thread!\n";
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		std::cout << "Hello\n";
 	}
@@ -18,11 +18,10 @@ int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	T_INIT(T_REC, thread::ThreadType::POOL_FIFO);
-
-	for (int i = 0; i < 1000; i++)
-	{
-		T_FJOB(Test);
-	}
+	T_FJOB(Test);
+	T_FJOB(Test);
+	T_FJOB(Test);
+	Test();
 
 	while (thread::MultiThreader::GetAmountOfJobs() > 0);
 	T_DESTROY();
